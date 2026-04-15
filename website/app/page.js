@@ -16,7 +16,7 @@ export default function Home() {
           8 output files. 15 sections. 12 extractors. No other tool does this.
         </p>
         <a href="https://github.com/Manavarya09/design-extract" className="hero-cmd">
-          npx designlang https://stripe.com
+          npx designlang https://vercel.com
         </a>
         <div className="scroll-hint">scroll down</div>
       </section>
