@@ -5,14 +5,14 @@ Extract the complete design language from any website. Produces an AI-optimized 
 ## Install & Use
 
 ```bash
-npx @masyv/design-extract https://example.com
+npx @manavarya0909/design-ex https://example.com
 ```
 
 Or install globally:
 
 ```bash
-npm install -g @masyv/design-extract
-design-extract https://example.com
+npm install -g @manavarya0909/design-ex
+design-ex https://example.com
 ```
 
 ## What It Extracts
@@ -39,7 +39,7 @@ design-extract https://example.com
 ## Options
 
 ```
-design-extract <url> [options]
+design-ex <url> [options]
 
 Options:
   -o, --out <dir>       Output directory (default: ./design-extract-output)
