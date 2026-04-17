@@ -1,9 +1,9 @@
 :root {
-  --red: #ff0000;
+  --red: #ffffff;
   --black: #0a0a0a;
-  --white: #f5f0e8;
-  --cream: #e8e0d0;
-  --yellow: #ffdd00;
+  --white: #ffffff;
+  --cream: #ffffff;
+  --yellow: #ffffff;
   --gray: #333;
 }
 
@@ -47,7 +47,7 @@ a { color: inherit; }
   font-family: 'Unbounded', sans-serif;
   font-size: 14vw;
   font-weight: 900;
-  color: rgba(255, 0, 0, 0.03);
+  color: rgba(255, 255, 255, 0.03);
   white-space: nowrap;
   pointer-events: none;
   animation: scroll-text 20s linear infinite;
@@ -216,7 +216,7 @@ section {
   font-family: 'Unbounded', sans-serif;
   font-size: 80px;
   font-weight: 900;
-  color: rgba(255, 0, 0, 0.06);
+  color: rgba(255, 255, 255, 0.06);
   line-height: 1;
 }
 
@@ -302,13 +302,13 @@ section {
 .command-card {
   background: var(--black);
   padding: 32px;
-  border: 2px solid rgba(255,0,0,0.3);
+  border: 2px solid rgba(255,255,255,0.3);
   transition: all 0.15s;
 }
 
 .command-card:hover {
   border-color: var(--red);
-  background: rgba(255, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .command-name {
@@ -668,9 +668,9 @@ footer a:hover {
   font-weight: 700;
 }
 
-.extractor-a11y-score.good { color: #4ade80; }
-.extractor-a11y-score.ok { color: var(--yellow); }
-.extractor-a11y-score.bad { color: var(--red); }
+.extractor-a11y-score.good { color: #ffffff; }
+.extractor-a11y-score.ok { color: #aaaaaa; }
+.extractor-a11y-score.bad { color: #666666; }
 
 .extractor-a11y-fails {
   font-family: 'JetBrains Mono', monospace;
