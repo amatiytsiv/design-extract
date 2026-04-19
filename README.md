@@ -12,11 +12,7 @@
 ---
 
 <p align="center">
-  <img src="website/public/demo.gif" alt="designlang in action — paste a URL, get Tailwind + shadcn + Figma tokens" width="100%" onerror="this.onerror=null;this.src='designlang.png'">
-</p>
-
-<p align="center">
-  <sub>The GIF above is generated from <code>docs/demo.tape</code>. Re-record with <code>vhs docs/demo.tape -o website/public/demo.gif</code>.</sub>
+  <img src="designlang.png" alt="designlang in action" width="100%">
 </p>
 
 **designlang** crawls any website with a headless browser, extracts every computed style from the live DOM, and generates **8 output files** — including an AI-optimized markdown file, visual HTML preview, Tailwind config, React theme, shadcn/ui theme, Figma variables, W3C design tokens, and CSS custom properties.
