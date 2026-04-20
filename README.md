@@ -506,3 +506,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). PRs welcome!
 ## License
 
 [MIT](LICENSE) - Manav Arya Singh
+
+[![designlang on npm](https://pkgfolio.vercel.app/embed/pkg/designlang)](https://www.npmjs.com/package/designlang)
