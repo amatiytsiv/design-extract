@@ -37,6 +37,7 @@ import { extractSeo } from './extractors/seo.js';
 import { extractIconSystem } from './extractors/icon-system.js';
 import { extractBackgroundPatterns } from './extractors/background-patterns.js';
 import { extractStackIntel } from './extractors/stack-intel.js';
+import { extractFormStates } from './extractors/form-states.js';
 import { formatDtcgTokens } from './formatters/dtcg-tokens.js';
 import { formatMotionTokens } from './formatters/motion-tokens.js';
 
@@ -145,6 +146,7 @@ export async function extractDesignLanguage(url, options = {}) {
   design.iconSystem = safeExtract(extractIconSystem, rawData.light?.icons || []) || { library: 'unknown', confidence: 0, stats: {}, signals: [], icons: [] };
   design.backgroundPatterns = safeExtract(extractBackgroundPatterns, rawData) || { labels: ['plain'], counts: {}, gradientTotals: {}, samples: [] };
   design.stackIntel = safeExtract(extractStackIntel, rawData.light?.stack || {}) || { cms: [], analytics: [], experimentation: [] };
+  design.formStates = safeExtract(extractFormStates, rawData, design) || { flags: [], forms: { count: 0, families: [] }, modals: [], toastLibraries: [] };
   // Stash raw crawler output so downstream orchestration (multipage, smart)
   // can rebuild the digest without re-crawling.
   design._raw = rawData;
@@ -218,6 +220,7 @@ export { extractSeo } from './extractors/seo.js';
 export { extractIconSystem } from './extractors/icon-system.js';
 export { extractBackgroundPatterns } from './extractors/background-patterns.js';
 export { extractStackIntel } from './extractors/stack-intel.js';
+export { extractFormStates } from './extractors/form-states.js';
 export { refineWithSmart } from './classifiers/smart.js';
 export { crawlCanonicalPages, computeCrossPageConsistency, discoverCanonicalPages } from './multipage.js';
 export { buildPromptPack, formatV0Prompt, formatLovablePrompt, formatCursorPrompt, formatClaudeArtifactPrompt } from './formatters/prompt-pack.js';

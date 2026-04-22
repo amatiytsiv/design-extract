@@ -376,6 +376,9 @@ program
       if (design.stackIntel) {
         files.push({ name: `${prefix}-stack-intel.json`, content: JSON.stringify(design.stackIntel, null, 2), label: 'Stack Intel (CMS/analytics/experimentation)' });
       }
+      if (design.formStates) {
+        files.push({ name: `${prefix}-form-states.json`, content: JSON.stringify(design.formStates, null, 2), label: 'Forms + States' });
+      }
       if (merged.prompts !== false) {
         const pack = buildPromptPack(design);
         const promptsDir = join(outDir, `${prefix}-prompts`);

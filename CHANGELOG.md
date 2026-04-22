@@ -1,5 +1,18 @@
 # Changelog
 
+## [10.5.0] — 2026-04-22
+
+**The states LLMs always botch.**
+
+### Added
+
+- **`src/extractors/form-states.js`** — surfaces forms (input count + style families), modal/dialog/sheet containers, skeleton and spinner loading indicators, empty-state and error-state placeholders, and detects which toast library is on the page (Sonner, react-hot-toast, react-toastify, Radix Toast, Chakra Toast, Notistack).
+- New output: `*-form-states.json`.
+
+Closes the v10.x minor-release series started in v10.1. Everything the
+v10 spec deferred for v11 is now shipped as minor releases — with no
+breaking changes along the way.
+
 ## [10.4.0] — 2026-04-22
 
 **Identification trio: icon system, background patterns, stack intel.**
