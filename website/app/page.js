@@ -167,7 +167,7 @@ export default function Home() {
   );
 }
 
-function InstallTracks() {
+export function InstallTracks() {
   const preStyle = {
     padding: 'var(--r4) var(--r5)',
     background: 'var(--ink)',
@@ -338,7 +338,7 @@ function InstallTracks() {
   );
 }
 
-function SiteFooter() {
+export function SiteFooter() {
   const colHead = {
     fontFamily: 'var(--font-mono)',
     fontSize: 11,
@@ -417,7 +417,7 @@ function SiteFooter() {
   );
 }
 
-function V9Capabilities() {
+export function V9Capabilities() {
   const items = [
     {
       tag: 'A · motion',
@@ -586,7 +586,7 @@ WARN  [color-sprawl] 3 near-dupes`,
   );
 }
 
-function V11Showcase() {
+export function V11Showcase() {
   const tracks = [
     {
       num: '01',
@@ -800,7 +800,7 @@ function V11Showcase() {
   );
 }
 
-function V10Capabilities() {
+export function V10Capabilities() {
   // v10 is now supporting intelligence beneath the v11 trio. Compact
   // editorial strip — not a uniform card grid.
   const items = [

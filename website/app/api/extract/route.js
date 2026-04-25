@@ -24,7 +24,7 @@ import { formatAgentRules } from '../../../../src/formatters/agent-rules.js';
 import { nameFromUrl } from '../../../../src/utils.js';
 
 import { validateTargetUrl } from '../../../../website/lib/url-safety.js';
-import { checkRate } from '../../../../website/lib/rate-limit.js';
+import { checkRate, checkRateBlob } from '../../../../website/lib/rate-limit.js';
 import { cacheKey, getCached, putCached } from '../../../../website/lib/cache.js';
 
 export const runtime = 'nodejs';
@@ -45,6 +45,16 @@ const STAGES = [
 ];
 
 async function getBrowserOptions() {
+  // Preferred path: connect to a remote Playwright browser (Browserless v2).
+  // No Chromium binary on the function — cold starts drop from ~3s to ~50ms,
+  // and the heavy work runs on Browserless's infra, not Vercel CPU minutes.
+  if (process.env.BROWSERLESS_TOKEN) {
+    const region = process.env.BROWSERLESS_REGION || 'production-sfo';
+    return {
+      wsEndpoint: `wss://${region}.browserless.io/?token=${process.env.BROWSERLESS_TOKEN}`,
+    };
+  }
+  // Fallback: bundled Chromium via @sparticuz on Vercel/Lambda. Costs CPU.
   if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
     const chromium = (await import('@sparticuz/chromium')).default;
     return {
@@ -183,19 +193,41 @@ export async function POST(request) {
   const targetUrl = validation.url;
 
   const ip = extractIp(request);
-  const rate = checkRate(`extract:${ip}`);
-  if (!rate.allowed) {
-    return Response.json(
-      { error: 'Rate limit — 3 extractions per day. Try again later.', resetAt: rate.resetAt },
-      { status: 429 }
-    );
+
+  // Cache hit serves free — no rate-limit accounting, repeats cost nothing.
+  const key = cacheKey(targetUrl);
+  const cached = await getCached(key);
+
+  if (!cached) {
+    // First-line per-instance memory guard (cheap, blunts hammering within an instance).
+    const memRate = checkRate(`extract:${ip}`, { limit: 1 });
+    if (!memRate.allowed) {
+      return Response.json(
+        {
+          error: 'Free demo: 1 extraction per day. Use the CLI for unlimited: npx designlang ' + new URL(targetUrl).hostname,
+          resetAt: memRate.resetAt,
+          cli: 'npx designlang ' + new URL(targetUrl).hostname,
+        },
+        { status: 429, headers: { 'retry-after': String(Math.ceil((memRate.resetAt - Date.now()) / 1000)) } }
+      );
+    }
+    // Persistent Blob-backed limit (survives cold starts, real cross-instance enforcement).
+    const blobRate = await checkRateBlob(`extract:${ip}`, { limit: 1 });
+    if (!blobRate.allowed) {
+      return Response.json(
+        {
+          error: 'Free demo: 1 extraction per day. Use the CLI for unlimited: npx designlang ' + new URL(targetUrl).hostname,
+          resetAt: blobRate.resetAt,
+          cli: 'npx designlang ' + new URL(targetUrl).hostname,
+        },
+        { status: 429, headers: { 'retry-after': String(Math.ceil((blobRate.resetAt - Date.now()) / 1000)) } }
+      );
+    }
   }
 
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const key = cacheKey(targetUrl);
-        const cached = await getCached(key);
         if (cached) {
           await streamCached(controller, cached, targetUrl);
           controller.close();

@@ -26,6 +26,7 @@ export async function crawlPage(url, options = {}) {
     deepInteract = false,
     selector,
     channel,
+    wsEndpoint,  // Remote browser (e.g. Browserless). When set, skips local launch.
   } = options;
 
   const launchArgs = [
@@ -38,14 +39,20 @@ export async function crawlPage(url, options = {}) {
     launchArgs.push('--ignore-certificate-errors', '--ignore-ssl-errors');
   }
 
-  const browser = await chromium.launch({
-    headless: true,
-    ...(executablePath && { executablePath }),
-    // channel: 'chrome' forces Playwright to use the system Chrome install
-    // instead of the 150MB bundled Chromium — see --system-chrome.
-    ...(channel && { channel }),
-    args: launchArgs,
-  });
+  // Prefer remote browser when wsEndpoint is provided (Browserless v2 / any
+  // Playwright-protocol WSS). Skips the @sparticuz/chromium 150MB cold-start
+  // tax on Vercel Functions entirely.
+  const usingRemote = !!wsEndpoint;
+  const browser = usingRemote
+    ? await chromium.connect(wsEndpoint, { timeout: 30000 })
+    : await chromium.launch({
+        headless: true,
+        ...(executablePath && { executablePath }),
+        // channel: 'chrome' forces Playwright to use the system Chrome install
+        // instead of the 150MB bundled Chromium — see --system-chrome.
+        ...(channel && { channel }),
+        args: launchArgs,
+      });
   try {
     const context = await browser.newContext({
       viewport: { width, height },
